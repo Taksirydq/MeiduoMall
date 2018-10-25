@@ -204,6 +204,20 @@ LOGGING = {
 REST_FRAMEWORK = {
     # 异常处理
     'EXCEPTION_HANDLER': 'utils.exceptions.exception_handler',
+    # 身份认证的方式：jwt,session,basic
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        # 前后端分离使用jwt验证
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        # 访问admin后台时使用
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+}
+import datetime
+
+# 配置jwt
+JWT_AUTH = {
+    # 过期时间，为2小时
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=2),
 }
 # CORS白名单
 CORS_ORIGIN_WHITELIST = (

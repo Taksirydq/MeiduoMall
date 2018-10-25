@@ -24,8 +24,8 @@ class SMSCodeView(APIView):
         code = random.randint(100000, 999999)
         # 2.1 保存到redis:验证码,发送的标记　优化(使用pipeline管道)
         redis_pipeline = redis_cli.pipeline()
-        redis_pipeline.setex('sms_code' + mobile, constants.SMS_CODE_EXPIRES, code)
-        redis_pipeline.setex('sms_flag' + mobile, constants.SMS_FLAG_EXPIRES, 1)
+        redis_pipeline.setex('sms_code_' + mobile, constants.SMS_CODE_EXPIRES, code)
+        redis_pipeline.setex('sms_flag_' + mobile, constants.SMS_FLAG_EXPIRES, 1)
         redis_pipeline.execute()
         # 3.发送短信:云通讯
         # CCP.sendTemplateSMS(mobile, code, constants.SMS_CODE_EXPIRES/60, 1)
