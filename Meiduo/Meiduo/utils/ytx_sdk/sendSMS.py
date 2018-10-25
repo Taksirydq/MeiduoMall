@@ -3,7 +3,7 @@ from .CCPRestSDK import REST
 
 class CCP:
     @classmethod
-    def sendTemplateSMS(self, mobile, code,expires, template_id):
+    def sendTemplateSMS(cls, mobile, code,expires, template_id):
         # 主帐号
         accountSid = '8aaf070866196530016623366b8706d5'
 
