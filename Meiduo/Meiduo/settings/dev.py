@@ -218,6 +218,8 @@ import datetime
 JWT_AUTH = {
     # 过期时间，为2小时
     'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=2),
+    # 指定返回类型
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'users.utils.jwt_response_payload_handler',
 }
 # CORS白名单
 CORS_ORIGIN_WHITELIST = (
@@ -227,3 +229,7 @@ CORS_ALLOW_CREDENTIALS = True  # 允许携带cookie
 
 # 替换用户模型，格式为"应用名称.类型名称"
 AUTH_USER_MODEL = 'users.User'
+# 指定认证后端,用于登录时的验证
+# AUTHENTICATION_BACKENDS =[
+#     'users.utils.'
+# ]
