@@ -230,6 +230,6 @@ CORS_ALLOW_CREDENTIALS = True  # 允许携带cookie
 # 替换用户模型，格式为"应用名称.类型名称"
 AUTH_USER_MODEL = 'users.User'
 # 指定认证后端,用于登录时的验证
-# AUTHENTICATION_BACKENDS =[
-#     'users.utils.'
-# ]
+AUTHENTICATION_BACKENDS =[
+    'users.utils.MyModelBackend'
+]
