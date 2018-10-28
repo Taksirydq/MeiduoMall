@@ -22,6 +22,7 @@ class SMSCodeView(APIView):
             raise serializers.ValidationError('您发送短信太过频繁')
         # 2.如果未发短信,则随机生成6位随机数
         code = random.randint(100000, 999999)
+        code =123456
         # 2.1 保存到redis:验证码,发送的标记　优化(使用pipeline管道)
         redis_pipeline = redis_cli.pipeline()
         redis_pipeline.setex('sms_code_' + mobile, constants.SMS_CODE_EXPIRES, code)
