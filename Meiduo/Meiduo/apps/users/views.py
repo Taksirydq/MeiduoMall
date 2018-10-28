@@ -1,8 +1,10 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import User
-from .serializers import UserCreateSerializer
+from .serializers import UserCreateSerializer, UserDetailSerializer
 from rest_framework.generics import CreateAPIView
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 
 
 class UsernameCountView(APIView):
@@ -29,3 +31,15 @@ class MobileCountView(APIView):
 class UserCreateView(CreateAPIView):
     # 创建用户
     serializer_class = UserCreateSerializer
+
+
+class UserDetailView(generics.RetrieveAPIView):
+    serializer_class = UserDetailSerializer
+    # 要求登录
+    permission_classes = [IsAuthenticated]
+
+    # 视图中封装好的代码，是根据主键查询得到的对象
+    # 现在的需求: 不是根据pk查,而是要获取登录的用户
+    # 解决:
+    def get_object(self):
+        return self.request.user
