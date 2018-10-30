@@ -64,7 +64,7 @@ var vm = new Vue({
         // 保存email
         save_email: function () {
             // 保存email
-            var re = /^[a-z0-9][\w\.\-]*@[a-z0-9\-]+(\.[a-z]{2,5}){1,2}$/;
+            var re = /^[A-Z0-9][\w\.\-]*@[a-z0-9\-]+(\.[a-z]{2,5}){1,2}$/;
             if (re.test(this.email)) {
                 this.email_error = false;
             } else {

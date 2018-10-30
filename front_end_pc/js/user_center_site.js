@@ -151,7 +151,7 @@ var vm = new Vue({
         },
         check_email: function () {
             if (this.form_address.email) {
-                var re = /^[a-z0-9][\w\.\-]*@[a-z0-9\-]+(\.[a-z]{2,5}){1,2}$/;
+                var re = /^[A-Z0-9][\w\.\-]*@[a-z0-9\-]+(\.[a-z]{2,5}){1,2}$/;
                 if (re.test(this.form_address.email)) {
                     this.error_email = false;
                 } else {
