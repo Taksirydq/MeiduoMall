@@ -5,7 +5,7 @@ from django.conf import settings
 def dumps(data, expires):
     # 创建对象
     serializer = TimedJSONWebSignatureSerializer(settings.SECRET_KEY, expires)
-    # 加密
+    # 加密 是通过配置中的settings.SECRET_KEY进行加密
     result = serializer.dumps(data).decode()
     return result
 
