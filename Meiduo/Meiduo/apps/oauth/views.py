@@ -13,6 +13,7 @@ class QQurlView(APIView):
 
     def get(self, request):
         # 接收登录后的地址
+        # next: 表示用户登录成功后访问那个网址
         state = request.query_params.get('next')
         # 创建工具类对象
         oauthqq = OAuthQQ(state=state)
@@ -29,6 +30,7 @@ class QQLoginView(APIView):
 
     def get(self, request):
         # 获取code
+        # query_params：获取查询字符串的数据
         code = request.query_params.get('code')
         # 根据code获取token
         oauthqq = OAuthQQ()
@@ -56,7 +58,7 @@ class QQLoginView(APIView):
 
     def post(self, request):
         """登录成功后的绑定视图"""
-        # 接收
+        # 接收(获取到请求体里数据赋给data，创建一个序列化器对象)
         serializer = QQBindSerializer(data=request.data)
         # 验证
         if not serializer.is_valid():

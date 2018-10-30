@@ -3,7 +3,6 @@ from .models import QQUser
 from users.models import User
 from utils import tjws
 from . import constants
-import re
 from django_redis import get_redis_connection
 
 
