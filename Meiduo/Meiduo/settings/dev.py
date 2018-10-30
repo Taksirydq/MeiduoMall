@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'verifications.apps.VerificationsConfig',
-    'oauth.apps.OauthConfig'
+    'oauth.apps.OauthConfig',
+    'areas.apps.AreasConfig',
 ]
 
 MIDDLEWARE = [
@@ -213,6 +214,15 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ),
 }
+
+# DRF扩展
+REST_FRAMEWORK_EXTENSIONS = {
+    # 缓存时间，单位是秒
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60 * 60,
+    # 缓存存储，使用django的cache配置
+    'DEFAULT_USE_CACHE': 'default',
+}
+
 import datetime
 
 # 配置jwt
@@ -239,3 +249,16 @@ QQ_CLIENT_ID = '101474184'  # appid
 QQ_CLIENT_SECRET = 'c6ce949e04e12ecc909ae6a8b09b637c'  # appkey
 QQ_REDIRECT_URI = 'http://www.meiduo.site:8080/oauth_callback.html'  # 回调地址
 QQ_STATE = '/'  # 登录成功后返回到网站的那个页面
+
+# 邮箱设置
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# 邮件服务器，可修改
+EMAIL_HOST = 'smtp.163.com'
+# 邮件服务器端口
+EMAIL_PORT = 25
+# 发送邮件的邮箱
+EMAIL_HOST_USER = 'Taksirydq@163.com'
+# 在邮箱中设置的客户端授权密码
+EMAIL_HOST_PASSWORD = '950802ydq'
+# 收件人看到的发件人
+EMAIL_FROM = '美多商城<Taksirydq@163.com>'
