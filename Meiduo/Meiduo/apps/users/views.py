@@ -8,6 +8,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from . import constants
+from rest_framework.decorators import action
 
 
 class UsernameCountView(APIView):
@@ -109,3 +110,41 @@ class AddressViewSet(ModelViewSet):
             "limit": constants.ADDRESS_LIMIT,
             "addresses": serializer.data
         })
+
+    # destroy-->物理删除,　重写,　实现逻辑删除
+    def destroy(self, request, *args, **kwargs):
+        """实现地址逻辑删除"""
+        # 根据主键查询对象
+        address = self.get_object()
+        # 逻辑删除
+        address.is_delete = True
+        # 保存
+        address.save()
+        # 响应
+        return Response(status=204)
+
+    # 修改标题--->/pk/title/------>put
+    # 如果没有detail=False---->* * */title/
+    @action(methods=['put'], detail=True)
+    def title(self, request, pk):
+        """修改标题"""
+        # 根据主键查询收货地址
+        address = self.get_object()
+        # 接收数据, 修改标题属性
+        address.title = request.data.get('title')
+        # 保存
+        address.save()
+        # 响应
+        return Response({'title': address.title})
+
+    @action(methods=['put'], detail=True)
+    def status(self, request, pk):
+        """设置默认收货地址"""
+        # 查找当前登录用户
+        user = request.user
+        # 修改属性
+        user.default_address_id = pk
+        # 保存
+        user.save()
+        # 响应
+        return Response({'message': 'OK'})
