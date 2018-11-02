@@ -40,7 +40,7 @@ class Address(BaseModel):
     district = models.ForeignKey('areas.Area', related_name='district_addr')
     # 详细地址
     place = models.CharField(max_length=100)
-    # 手机号
+    # 手机号c
     mobile = models.CharField(max_length=11)
     # 固定电话
     tel = models.CharField(max_length=20, null=True, blank=True)
