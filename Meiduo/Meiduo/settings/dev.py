@@ -52,6 +52,10 @@ INSTALLED_APPS = [
     'areas.apps.AreasConfig',
     'goods.apps.GoodsConfig',
     'contents.apps.ContentsConfig',
+    'ckeditor',  # 富文本编辑器
+    'ckeditor_uploader',  # 富文本编辑器上传图片模块
+    'django_crontab',  # 定时任务
+    'django_filters',  # 需要注册应用
 ]
 
 MIDDLEWARE = [
@@ -70,7 +74,7 @@ ROOT_URLCONF = 'Meiduo.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, '../../templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'templates')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -264,3 +268,32 @@ EMAIL_HOST_USER = 'Taksirydq@163.com'
 EMAIL_HOST_PASSWORD = '950802ydq'
 # 收件人看到的发件人
 EMAIL_FROM = '美多商城<Taksirydq@163.com>'
+
+# django文件存储
+DEFAULT_FILE_STORAGE = 'utils.fast_dfs.fdfs_storage.Fast_DFSStorage'
+
+# FastDFS
+FDFS_URL = 'http://image.meiduo.site:8888/'
+FDFS_CLIENT_CONF = os.path.join(BASE_DIR, 'utils/fast_dfs/client.conf')
+
+# 富文本编辑器ckeditor配置
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',  # 工具条功能
+        'height': 300,  # 编辑器高度
+        # 'width': 300,  # 编辑器宽度
+    },
+}
+CKEDITOR_UPLOAD_PATH = ''  # 上传图片保存路径，使用了FastDFS，所以此处设为''
+
+# 生成静态文件的目录
+GENERATE_STATIC_HTML_PATH = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'front_end_pc')
+
+# 定时任务
+CRONJOBS_LOG = os.path.join(os.path.dirname(BASE_DIR), 'logs/crontab.log')
+CRONJOBS = [
+    # 每5分钟执行一次生成主页静态文件
+    ('*/5 * * * *', 'contents.crons.generate_index_html', '>> ' + CRONJOBS_LOG),
+]
+# 解决crontab中文问题
+CRONTAB_COMMAND_PREFIX = 'LANG_ALL=zh_cn.UTF-8'
