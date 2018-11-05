@@ -57,7 +57,8 @@ INSTALLED_APPS = [
     'django_crontab',  # 定时任务
     'django_filters',  # 需要注册应用
     'haystack',
-    'carts.apps.CartsConfig'
+    'carts.apps.CartsConfig',
+    'orders.apps.OrdersConfig'
 ]
 
 MIDDLEWARE = [

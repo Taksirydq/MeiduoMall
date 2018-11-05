@@ -6,6 +6,7 @@ from utils import tjws
 from . import constants
 from utils.jwt_token import generate
 from .serializers import QQBindSerializer
+from carts.utils import merge_cookie_to_redis
 
 
 class QQurlView(APIView):
@@ -49,12 +50,17 @@ class QQLoginView(APIView):
                 'access_token': data
             })
         else:
-            # 如果存在，则状态保持，表示登录成功
-            return Response({
+            # 如果存在，则登录成功
+            # 状态保持
+            response = Response({
                 'user_id': qquser.user.id,
                 'username': qquser.user.username,
                 'token': generate(qquser.user)
             })
+            # 合并
+            response = merge_cookie_to_redis(request, qquser.user.id, response)
+            # 响应
+            return response
 
     def post(self, request):
         """登录成功后的绑定视图"""
@@ -66,9 +72,13 @@ class QQLoginView(APIView):
         # 绑定: 在qquser表中创建一条数据
         qquser = serializer.save()
         # 响应: 绑定完成,表示登录成功,状态保存
-        return Response({
+        response = Response({
             'user_id': qquser.user.id,
             'username': qquser.user.username,
             'token': generate(qquser.user)
 
         })
+        # 合并
+        response = merge_cookie_to_redis(request, qquser.user.id, response)
+        # 响应
+        return response
