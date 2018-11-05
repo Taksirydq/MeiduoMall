@@ -79,6 +79,7 @@ class CartView(APIView):
             skus = []
             for key, value in cart_dict.items():
                 sku = SKU.objects.get(pk=key)
+                # 给商品增加属性
                 sku.count = value['count']
                 sku.selected = value['selected']
                 skus.append(sku)
