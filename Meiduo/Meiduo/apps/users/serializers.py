@@ -185,6 +185,7 @@ class AddressSerializer(serializers.ModelSerializer):
 
 
 class BrowseHistorysSerializer(serializers.Serializer):
+    # 接收参数
     sku_id = serializers.IntegerField(min_value=1)
 
     def validate_sku_id(self, value):
@@ -198,9 +199,9 @@ class BrowseHistorysSerializer(serializers.Serializer):
         sku_id = validated_data['sku_id']
         # 连接redis
         redis_cli = get_redis_connection('history')
-        # 根据不同的用户构造键
+        # 根据不同的用户构造键(每个用户都有不同的浏览记录)
         key = 'history_%d' % self.context['request'].user.id
-        # 1.删除sku_id
+        # 1.删除sku_id, 0:代表都删除
         redis_cli.lrem(key, 0, sku_id)
         # 2.添加
         redis_cli.lpush(key, sku_id)

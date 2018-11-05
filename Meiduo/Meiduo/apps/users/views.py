@@ -154,6 +154,7 @@ class AddressViewSet(ModelViewSet):
 
 
 class BrowseHistoryView(generics.ListCreateAPIView):
+    """用户浏览历史记录"""
     permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
