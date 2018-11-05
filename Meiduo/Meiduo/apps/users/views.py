@@ -12,6 +12,8 @@ from . import constants
 from rest_framework.decorators import action
 from django_redis import get_redis_connection
 from goods.serializers import SKUSerializer
+from rest_framework_jwt.views import ObtainJSONWebToken
+from carts.utils import merge_cookie_to_redis
 
 
 class UsernameCountView(APIView):
@@ -176,3 +178,16 @@ class BrowseHistoryView(generics.ListCreateAPIView):
         for sku_id in sku_ids:
             skus.append(SKU.objects.get(pk=int(sku_id)))
         return skus  # [sku对象, sku对象, sku对象 .....]
+
+
+class LoginView(ObtainJSONWebToken):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        # 登录逻辑还是使用jwt中的视图函数实现,此处在登录后添加自己的逻辑
+        # 判断是否登录成功
+        if response.status_code == 200:
+            # 获取用户编号
+            user_id = response.data.get('user_id')
+            # 当前添加逻辑: 合并购物车信息
+            response = merge_cookie_to_redis(request, user_id, response)
+        return response
