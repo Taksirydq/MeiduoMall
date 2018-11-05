@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'django_crontab',  # 定时任务
     'django_filters',  # 需要注册应用
     'haystack',
+    'carts.apps.CartsConfig'
 ]
 
 MIDDLEWARE = [
@@ -166,6 +167,13 @@ CACHES = {
     "history": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379/3",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
+    "cart": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/4",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -301,7 +309,7 @@ GENERATE_STATIC_HTML_PATH = os.path.join(os.path.dirname(os.path.dirname(BASE_DI
 CRONJOBS_LOG = os.path.join(os.path.dirname(BASE_DIR), 'logs/crontab.log')
 CRONJOBS = [
     # 每5分钟执行一次生成主页静态文件
-    ('*/5 * * * *', 'contents.crons.generate_index_html', '>> ' + CRONJOBS_LOG),
+    ('*/1 * * * *', 'contents.crons.generate_index_html', '>> ' + CRONJOBS_LOG),
 ]
 # 解决crontab中文问题
 CRONTAB_COMMAND_PREFIX = 'LANG_ALL=zh_cn.UTF-8'
