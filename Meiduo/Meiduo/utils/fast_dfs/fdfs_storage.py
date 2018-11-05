@@ -28,4 +28,5 @@ class Fast_DFSStorage(Storage):
 
     def url(self, name):
         """返回文件的完整的URL路径"""
+        print(settings.FDFS_URL + name)
         return settings.FDFS_URL + name
