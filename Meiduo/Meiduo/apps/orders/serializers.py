@@ -5,7 +5,7 @@ from datetime import datetime
 from goods.models import SKU
 from django_redis import get_redis_connection
 from django.db import transaction
-
+import time
 
 class OrderCreateSerializer(serializers.Serializer):
     order_id = serializers.CharField(read_only=True)
@@ -71,10 +71,22 @@ class OrderCreateSerializer(serializers.Serializer):
                     # 回滚事务
                     transaction.savepoint_rollback(sid)
                     raise serializers.ValidationError('库存不足')
-                # 4.2修改商品的库存量 销量
-                sku.stock -= count
-                sku.sales += count
-                sku.save()
+
+                # cpu执时间
+                # time.sleep(5)
+
+                # # 4.2修改商品的库存量 销量
+                # sku.stock -= count
+                # sku.sales += count
+                # sku.save()
+                # 使用乐观锁修改库存(解决并发)
+                stock = sku.stock - count
+                sales = sku.sales + count
+                result = SKU.objects.filter(pk=sku.id, stock=sku.stock).update(stock=stock, sales=sales)
+                # 如果修改成功，则返回１, 如果修改失败, 则返回０
+                if result <= 0:
+                    transaction.savepoint_rollback(sid)
+                    raise serializers.ValidationError('当前购买人数过多, 请稍后重试')
                 # 4.3创建订单商品对象
                 OrderGoods.objects.create(
                     order_id=order_id,
