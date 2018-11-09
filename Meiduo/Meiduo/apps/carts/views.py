@@ -74,6 +74,8 @@ class CartView(APIView):
             # 未登录, 读取cookie
             # 获取cookie中购物车信息
             cart_str = request.COOKIES.get('cart')
+            if cart_str is None:
+                return Response()
             cart_dict = myjson.loads(cart_str)
             # 根据商品编号查询对象,并添加数量 选中属性
             skus = []
@@ -154,7 +156,7 @@ class CartView(APIView):
             user = request.user
         except:
             user = None
-        serializer = serializers.CartDeleteSerializer(data=request.data)
+        serializer = serializers.CartDeleteSerializer(data=request.data)  # 返回解析之后请求体的数据
         serializer.is_valid(raise_exception=True)
         sku_id = serializer.validated_data['sku_id']
         response = Response(status=204)
